@@ -132,10 +132,23 @@ The malicious script is injected somehow into the site - exactly as in the other
 - user input is always asumed to be malicious! and it should be treated as such.
 - user input should always be sanitized and validated before it is used.
 - so, where is user input possible? = many many places
-- enclosed as HTML content within HTML attributes
+- enclosed as HTML content within HTML attributes, query strings, client hashes, stylesheets as value. 
 - `<input value="userInput">`
 - `<img src="javascript:alert("XSS");">`
 - `<table background="javacsript:alert("xss");">`
+- query strings = `http://example.com/?parameter=userInput`
+- client hashes `http://example.com#userInput
+- stylesheet values `color: userInput;`  
+- In JS `document.getElementByID('blah').innerHTML=userInput`
+This means that malacious user input has many contexts to operate in
+
+Legitimate HTML on the site
+`<input value="userInput">`
+Malicious script
+`"><script>...</script><input value="`
+Resultant HTML on the site ( combining above two
+`<input value=""><script>...</script><input value="">`
+
 
 
    
